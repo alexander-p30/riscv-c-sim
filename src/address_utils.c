@@ -24,16 +24,3 @@ int test(int32_t a) {
   return validateWordAddress(a);
 }
 
-/* int main() { */
-/*   test(0); */
-/*   test(3); */
-/*   test(4); */
-/*   test(8); */
-/*   test(-4); */
-/*   test(-0); */
-/*   test(4096); */
-/*   test(4097); */
-/*   test(4095); */
-/*   return 0; */
-/* } */
-
