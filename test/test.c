@@ -1,3 +1,16 @@
+/*
+ * Trabalho 1 de OAC
+ * Nome: Estevan Alexander de Paula
+ * Matrícula: 17/0009611
+ * Disciplina: Organização e Arqutetura de Computadores - Turma C
+ * Compilador: gcc 11.1.0
+ * SO: Linux
+ * IDE: Não foi utilizada IDE
+ * Resumo: o trabalho consiste em escrever, em C, funções que simulam
+ *         instruções de manipulação e acesso à memória do conjunto
+ *         de instruções RISC-V.
+*/
+
 #include <stdio.h>
 #include "../src/riscv_memory.h"
 #include "test.h"
@@ -9,10 +22,6 @@
 /* int32_t lb(uint32_t address, int32_t kte); */
 
 /* int32_t lbu(uint32_t address, int32_t kte); */
-
-/* void sw(uint32_t address, int32_t kte, int32_t dado); */
-
-/* void sb(uint32_t address, int32_t kte, int8_t dado); */
 
 int main() {
   int totalTests = 0;
