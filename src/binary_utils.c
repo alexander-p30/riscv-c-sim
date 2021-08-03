@@ -3,12 +3,7 @@
 #include "binary_utils.h"
 
 int32_t computeByteInIntExtractionMask(uint8_t byteIndexInInt) {
-  int32_t mask = 0b11111111;
-  uint8_t i = 0;
-
-  for(i = 0; i < byteIndexInInt; i++) {
-    mask <<= 8;
-  }
+  int32_t mask = 0xFF << (byteIndexInInt * 8);
 
   return mask;
 }
