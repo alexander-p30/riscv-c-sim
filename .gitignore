@@ -1,0 +1,3 @@
+# Ignore generated binaries
+*.out
+test_sim
