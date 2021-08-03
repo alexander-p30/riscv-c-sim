@@ -55,17 +55,21 @@ void sw(uint32_t address, int32_t kte, int32_t dado) {
 }
 
 void sb(uint32_t address, int32_t kte, int8_t dado) {
-  int32_t finalAddress = address + kte;
+  int32_t tempAddress = address + kte;
 
-  if(!validateByteAddress(finalAddress)) {
-    printf("O endereço %d fornecido é inválido! ", finalAddress);
+  if(!validateByteAddress(tempAddress)) {
+    printf("O endereço %d fornecido é inválido! ", tempAddress);
     printf("O endereço deve ser maior ou igual a 0 e menor ou igual a %d\n", MEM_SIZE);
     return;
   }
 
-  uint8_t byteIndexInInt = finalAddress % ADDRESS_STEP;
-  int32_t mask = computeByteInIntExtractionMask(byteIndexInInt);
-  int32_t expandedByte = extractByteFromInt(mem[finalAddress], mask);
+  uint8_t byteIndexInInt = tempAddress % ADDRESS_STEP;
+  int32_t finalAddress = tempAddress - byteIndexInInt;
+  int32_t expandedData = (dado << (byteIndexInInt * 8) & computeByteInIntExtractionMask(byteIndexInInt));
+  uint32_t clearByteInPositionMask = ~computeByteInIntExtractionMask(byteIndexInInt);
+  int32_t currentlyStoredWord = lw(finalAddress, 0);
+  int32_t dataToBeStored = (currentlyStoredWord & clearByteInPositionMask) | expandedData;
+  sw(finalAddress, 0, dataToBeStored);
 }
 
 int32_t* getMem() {
@@ -75,7 +79,7 @@ int32_t* getMem() {
 void resetMem() {
   int i = 0;
   for(i = 0; i < MEM_SIZE; i++) {
-    mem[MEM_SIZE] = 0;
+    mem[i] = 0;
   }
 }
 
