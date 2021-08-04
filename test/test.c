@@ -210,9 +210,7 @@ int main() {
   printf(ANSI_COLOR_RED);lw(16381, 0);printf(ANSI_COLOR_RESET "\n");
 
   printf(ANSI_COLOR_BLUE "lw(5, 0);\n");
-  printf(ANSI_COLOR_RED);lw(5, 0);printf(ANSI_COLOR_RESET "\n");
-
-
+  printf(ANSI_COLOR_RED);lw(5, 0);printf(ANSI_COLOR_RESET);
 
   return 0;
 }
