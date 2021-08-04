@@ -15,8 +15,10 @@
 #include "../src/riscv_memory.h"
 #include "test.h"
 
-#define ANSI_COLOR_RED     "\x1b[31m"
+#define ANSI_COLOR_BLUE    "\x1b[34m"
 #define ANSI_COLOR_GREEN   "\x1b[32m"
+#define ANSI_COLOR_MAGENTA "\x1b[35m"
+#define ANSI_COLOR_RED     "\x1b[31m"
 #define ANSI_COLOR_RESET   "\x1b[0m"
 
 /* int32_t lbu(uint32_t address, int32_t kte); */
@@ -26,6 +28,8 @@ int main() {
   int failedTests = 0;
 
   resetMem();
+
+  printf("-----Testes automatizados (utilizados durante o desenvolvimento)-----\n\n");
 
   printf("Testing sw\n");
   testSw(0, 0, 255, &totalTests, &failedTests);
@@ -92,6 +96,123 @@ int main() {
       " tests in total, of which "
       ANSI_COLOR_RED "%d" ANSI_COLOR_RESET
       " failed.\n", totalTests, failedTests);
+
+  printf("\n-----Testes \"verbosos\"-----\n");
+
+  printf("\nLegenda:");
+  printf(ANSI_COLOR_BLUE "\n\t- Código rodado" ANSI_COLOR_RESET);
+  printf(ANSI_COLOR_MAGENTA "\n\t- Resultado" ANSI_COLOR_RESET);
+  printf(ANSI_COLOR_RED "\n\t- Mensagem de erro\n" ANSI_COLOR_RESET);
+
+  printf(ANSI_COLOR_GREEN "\n======Primeiro cenário======\n" ANSI_COLOR_RESET);
+  sb(0, 0, 0x04); sb(0, 1, 0x03); sb(0, 2, 0x02); sb(0, 3, 0x01);
+  sb(4, 0, 0xAB); sb(4, 1, 0xCD); sb(4, 2, 0xEF); sb(4, 3, 0x11);
+  sw(12, 0, 0xFF);
+  sw(16, 0, 0xFFFF);
+  sw(20, 0, 0xFFFFFFFF);
+  sw(24, 0, 0x80000000);
+
+  printf(ANSI_COLOR_BLUE);
+  printf("sb(0, 0, 0x04); sb(0, 1, 0x03); sb(0, 2, 0x02); sb(0, 3, 0x01); \n");
+  printf("sb(4, 0, 0xAB); sb(4, 1, 0xCD); sb(4, 2, 0xEF); sb(4, 3, 0x11);\n");
+  printf("sw(12, 0, 0xFF);\n");
+  printf("sw(16, 0, 0xFFFF);\n");
+  printf("sw(20, 0, 0xFFFFFFFF);\n");
+  printf("sw(24, 0, 0x80000000);\n");
+
+  printf(ANSI_COLOR_RESET ANSI_COLOR_MAGENTA);
+  printf("\nmem[0] = %X\n", getMem()[0]);
+  printf("mem[1] = %X\n", getMem()[1]);
+  printf("mem[2] = %X\n", getMem()[2]);
+  printf("mem[3] = %X\n", getMem()[3]);
+  printf("mem[4] = %X\n", getMem()[4]);
+  printf("mem[5] = %X\n", getMem()[5]);
+  printf("mem[6] = %X\n", getMem()[6]);
+
+  printf("\nlb(4,0): %X\n", lb(4,0));
+  printf("lb(4,1): %X\n", lb(4,1));
+  printf("lb(4,2): %X\n", lb(4,2));
+  printf("lb(4,3): %X\n", lb(4,3));
+  printf("lbu(4,0): %X\n", lbu(4,0));
+  printf("lbu(4,1): %X\n", lbu(4,1));
+  printf("lbu(4,2): %X\n", lbu(4,2));
+  printf("lbu(4,3): %X\n", lbu(4,3));
+  printf("lw(12,0): %X\n", lw(12,0));
+  printf("lw(16, 0): %X\n", lw(16, 0));
+  printf("lw(20,0): %X\n", lw(20,0));
+  printf(ANSI_COLOR_RESET);
+
+  printf(ANSI_COLOR_GREEN "\n======Segundo cenário======\n" ANSI_COLOR_RESET);
+  printf("Testando inserir palavras e bytes no limite da memória, ou seja, no endereço %d.\n", MEM_SIZE_IN_BYTES - 1);
+
+  sw(MEM_SIZE_IN_BYTES, -4, 0x98765432);
+  printf(ANSI_COLOR_BLUE "sw(%d, -4, 0x98765432);\n", MEM_SIZE_IN_BYTES);
+  printf(ANSI_COLOR_MAGENTA "mem[%d] = %X\n\n" ANSI_COLOR_RESET, MEM_SIZE_IN_BYTES - 1, getMem()[(MEM_SIZE_IN_BYTES / 4) - 1]);
+
+  sb(MEM_SIZE_IN_BYTES, -2, 0xAA);
+  printf(ANSI_COLOR_BLUE "sb(MEM_SIZE_IN_BYTES, -2, 0xAA);\n", MEM_SIZE_IN_BYTES);
+  printf(ANSI_COLOR_MAGENTA "mem[%d] = %X\n\n" ANSI_COLOR_RESET, MEM_SIZE_IN_BYTES - 1, getMem()[(MEM_SIZE_IN_BYTES / 4) - 1]);
+
+  sb(MEM_SIZE_IN_BYTES, -4, 0xBB);
+  printf(ANSI_COLOR_BLUE "sb(MEM_SIZE_IN_BYTES, -4, 0xBB);\n", MEM_SIZE_IN_BYTES);
+  printf(ANSI_COLOR_MAGENTA "mem[%d] = %X\n\n" ANSI_COLOR_RESET, MEM_SIZE_IN_BYTES - 1, getMem()[(MEM_SIZE_IN_BYTES / 4) - 1]);
+
+  sb(MEM_SIZE_IN_BYTES, -1, 0xCC);
+  printf(ANSI_COLOR_BLUE "sb(MEM_SIZE_IN_BYTES, -1, 0xCC);\n", MEM_SIZE_IN_BYTES);
+  printf(ANSI_COLOR_MAGENTA "mem[%d] = %X\n\n" ANSI_COLOR_RESET, MEM_SIZE_IN_BYTES - 1, getMem()[(MEM_SIZE_IN_BYTES / 4) - 1]);
+
+  sb(MEM_SIZE_IN_BYTES, -4, 0xEA);sb(MEM_SIZE_IN_BYTES, -3, 0xEB);sb(MEM_SIZE_IN_BYTES, -2, 0xEC);sb(MEM_SIZE_IN_BYTES, -1, 0xED);
+  printf(ANSI_COLOR_BLUE);
+  printf("sb(%d, -4, 0xEA);", MEM_SIZE_IN_BYTES);
+  printf("sb(%d, -3, 0xEB);", MEM_SIZE_IN_BYTES);
+  printf("sb(%d, -2, 0xEC);", MEM_SIZE_IN_BYTES);
+  printf("sb(%d, -1, 0xED);\n", MEM_SIZE_IN_BYTES);
+  printf(ANSI_COLOR_MAGENTA "mem[%d] = %X\n" ANSI_COLOR_RESET, MEM_SIZE_IN_BYTES - 1, getMem()[(MEM_SIZE_IN_BYTES / 4) - 1]);
+  printf(ANSI_COLOR_RESET);
+
+  printf(ANSI_COLOR_GREEN "\n======Terceiro cenário======\n" ANSI_COLOR_RESET);
+  printf("Testando que as validações são aplicadas e as mensagens de erro, exibidas.\n\n");
+
+  printf(ANSI_COLOR_BLUE "sb(-1, 0, 0);\n");
+  printf(ANSI_COLOR_RED);sb(-1, 0, 0);printf(ANSI_COLOR_RESET "\n");
+
+  printf(ANSI_COLOR_BLUE "sb(16384, 0, 0);\n");
+  printf(ANSI_COLOR_RED);sb(16384, 0, 0);printf(ANSI_COLOR_RESET "\n");
+
+  printf(ANSI_COLOR_BLUE "lb(-1, 0);\n");
+  printf(ANSI_COLOR_RED);lb(-1, 0);printf(ANSI_COLOR_RESET "\n");
+
+  printf(ANSI_COLOR_BLUE "lb(16384, 0);\n");
+  printf(ANSI_COLOR_RED);lb(16384, 0);printf(ANSI_COLOR_RESET "\n");
+
+  printf(ANSI_COLOR_BLUE "lbu(-1, 0);\n");
+  printf(ANSI_COLOR_RED);lbu(-1, 0);printf(ANSI_COLOR_RESET "\n");
+
+  printf(ANSI_COLOR_BLUE "lbu(16384, 0);\n");
+  printf(ANSI_COLOR_RED);lbu(16384, 0);printf(ANSI_COLOR_RESET "\n");
+
+  printf(ANSI_COLOR_BLUE "sw(-1, 0, 0);\n");
+  printf(ANSI_COLOR_RED);sw(-1, 0, 0);printf(ANSI_COLOR_RESET "\n");
+
+  printf(ANSI_COLOR_BLUE "sw(16384, 0, 0);\n");
+  printf(ANSI_COLOR_RED);sw(16384, 0, 0);printf(ANSI_COLOR_RESET "\n");
+
+  printf(ANSI_COLOR_BLUE "sw(5, 0, 0);\n");
+  printf(ANSI_COLOR_RED);sw(5, 0, 0);printf(ANSI_COLOR_RESET "\n");
+
+  printf(ANSI_COLOR_BLUE "lw(-1, 0);\n");
+  printf(ANSI_COLOR_RED);lw(-1, 0);printf(ANSI_COLOR_RESET "\n");
+
+  printf(ANSI_COLOR_BLUE "lw(16384, 0);\n");
+  printf(ANSI_COLOR_RED);lw(16384, 0);printf(ANSI_COLOR_RESET "\n");
+
+  printf(ANSI_COLOR_BLUE "lw(16381, 0);\n");
+  printf(ANSI_COLOR_RED);lw(16381, 0);printf(ANSI_COLOR_RESET "\n");
+
+  printf(ANSI_COLOR_BLUE "lw(5, 0);\n");
+  printf(ANSI_COLOR_RED);lw(5, 0);printf(ANSI_COLOR_RESET "\n");
+
+
 
   return 0;
 }
