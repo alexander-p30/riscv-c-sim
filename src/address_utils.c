@@ -8,9 +8,9 @@ int validateWordAddress(int32_t address) {
 }
 
 int validateByteAddress(int32_t address) {
-  uint8_t isAddressNatural = address >= 0;
+  uint8_t isAddressPositive = address >= 0;
   uint8_t isAddressInsideMemSize = address <= MEM_SIZE_IN_BYTES;
 
-  return isAddressNatural && isAddressInsideMemSize;
+  return isAddressPositive && isAddressInsideMemSize;
 }
 
