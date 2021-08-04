@@ -38,7 +38,20 @@ int32_t lb(uint32_t address, int32_t kte) {
 }
 
 int32_t lbu(uint32_t address, int32_t kte) {
-  return 0;
+  int32_t tempAddress = address + kte;
+
+  if(!validateByteAddress(tempAddress)) {
+    printf("O endereço %d fornecido é inválido! ", tempAddress);
+    printf("O endereço deve ser maior ou igual a 0 e menor ou igual a %d\n", MEM_SIZE_IN_BYTES);
+    return 0;
+  }
+
+  uint8_t byteIndexInInt = tempAddress % ADDRESS_STEP;
+  int32_t finalAddress = (tempAddress - byteIndexInInt) / 4;
+  int32_t mask = computeByteInIntExtractionMask(byteIndexInInt);
+  int32_t shiftedByte = extractByteFromInt(mem[finalAddress], mask);
+
+  return (int32_t)((uint32_t)shiftedByte >> (byteIndexInInt * 8));
 }
 
 void sw(uint32_t address, int32_t kte, int32_t dado) {

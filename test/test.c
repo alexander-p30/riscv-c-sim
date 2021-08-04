@@ -73,6 +73,21 @@ int main() {
     resetMem();
   printf("\n\n");
 
+  printf("Testing lbu\n");
+  sb(0, 0, 0xAB); testLbu(0, 0, 0xAB, &totalTests, &failedTests);resetMem();
+  sb(0, 0, 0xBC); testLbu(0, 0, 0xBC, &totalTests, &failedTests);resetMem();
+  sb(4, 0, 0x35); testLbu(4, 0, 0x35, &totalTests, &failedTests);resetMem();
+  sb(4, 3, 0xBC); testLbu(4, 3, 0xBC, &totalTests, &failedTests);resetMem();
+  sb(4, 0, 0xAB); sb(4, 1, 0xCD); sb(4, 2, 0xEF); sb(4, 3, 0x01);
+    testLbu(4, 0, 0xAB, &totalTests, &failedTests);testLbu(4, 1, 0xCD, &totalTests, &failedTests);
+    testLbu(4, 2, 0xEF, &totalTests, &failedTests);testLbu(4, 3, 0x01, &totalTests, &failedTests);
+    resetMem();
+  sw(MEM_SIZE_IN_BYTES, -4, 0x98765432);
+    testLbu(MEM_SIZE_IN_BYTES, -4, 0x32, &totalTests, &failedTests);testLbu(MEM_SIZE_IN_BYTES, -3, 0x54, &totalTests, &failedTests);
+    testLbu(MEM_SIZE_IN_BYTES, -2, 0x76, &totalTests, &failedTests);testLbu(MEM_SIZE_IN_BYTES, -1, 0x98, &totalTests, &failedTests);
+    resetMem();
+  printf("\n\n");
+
   printf("Ran " ANSI_COLOR_GREEN "%d" ANSI_COLOR_RESET
       " tests in total, of which "
       ANSI_COLOR_RED "%d" ANSI_COLOR_RESET
@@ -128,6 +143,14 @@ void testLw(uint32_t address, int32_t kte, int32_t expectedValue, int *totalTest
 
 void testLb(uint32_t address, int32_t kte, int32_t expectedValue, int *totalTests, int *failedTests) {
   if(lb(address, kte) == expectedValue) {
+    testSuccess(totalTests, failedTests);
+  } else {
+    testFail(totalTests, failedTests);
+  }
+}
+
+void testLbu(uint32_t address, int32_t kte, int32_t expectedValue, int *totalTests, int *failedTests) {
+  if(lbu(address, kte) == expectedValue) {
     testSuccess(totalTests, failedTests);
   } else {
     testFail(totalTests, failedTests);

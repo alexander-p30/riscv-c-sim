@@ -13,6 +13,8 @@ void testLw(uint32_t address, int32_t kte, int32_t expectedValue, int *totalTest
 
 void testLb(uint32_t address, int32_t kte, int32_t expectedValue, int *totalTests, int *failedTests);
 
+void testLbu(uint32_t address, int32_t kte, int32_t expectedValue, int *totalTests, int *failedTests);
+
 int main();
 
 #endif
