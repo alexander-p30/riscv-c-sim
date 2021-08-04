@@ -3,7 +3,8 @@
 
 #include <stdint.h>
 
-#define MEM_SIZE 4096
+#define MEM_SIZE_IN_WORDS 4096
+#define MEM_SIZE_IN_BYTES MEM_SIZE_IN_WORDS * 4
 
 int32_t lw(uint32_t address, int32_t kte);
 
