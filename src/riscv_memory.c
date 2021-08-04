@@ -32,8 +32,9 @@ int32_t lb(uint32_t address, int32_t kte) {
   int32_t finalAddress = (tempAddress - byteIndexInInt) / 4;
   int32_t mask = computeByteInIntExtractionMask(byteIndexInInt);
   int32_t shiftedByte = extractByteFromInt(mem[finalAddress], mask);
+  int32_t unsignedByte = shiftedByte >> (byteIndexInInt * 8);
 
-  return (int32_t)((uint32_t)shiftedByte >> (byteIndexInInt * 8));
+  return unsignedByte | ~computeByteInIntExtractionMask(0);
 }
 
 int32_t lbu(uint32_t address, int32_t kte) {
