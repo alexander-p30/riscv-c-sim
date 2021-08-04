@@ -10,7 +10,7 @@ int32_t lw(uint32_t address, int32_t kte) {
 
   if(!validateWordAddress(tempAddress)) {
     printf("O endereço %d fornecido é inválido! ", tempAddress);
-    printf("O endereço deve ser divisível por %d e menor ou igual a %d.\n", ADDRESS_STEP, MEM_SIZE_IN_BYTES);
+    printf("O endereço deve ser divisível por %d e menor ou igual a %d.\n", ADDRESS_STEP, MEM_SIZE_IN_BYTES - 4);
     return 0;
   }
 
@@ -24,7 +24,7 @@ int32_t lb(uint32_t address, int32_t kte) {
 
   if(!validateByteAddress(tempAddress)) {
     printf("O endereço %d fornecido é inválido! ", tempAddress);
-    printf("O endereço deve ser maior ou igual a 0 e menor ou igual a %d\n", MEM_SIZE_IN_BYTES);
+    printf("O endereço deve ser maior ou igual a 0 e menor ou igual a %d\n", MEM_SIZE_IN_BYTES - 1);
     return 0;
   }
 
@@ -42,7 +42,7 @@ int32_t lbu(uint32_t address, int32_t kte) {
 
   if(!validateByteAddress(tempAddress)) {
     printf("O endereço %d fornecido é inválido! ", tempAddress);
-    printf("O endereço deve ser maior ou igual a 0 e menor ou igual a %d\n", MEM_SIZE_IN_BYTES);
+    printf("O endereço deve ser maior ou igual a 0 e menor ou igual a %d\n", MEM_SIZE_IN_BYTES - 1);
     return 0;
   }
 
@@ -59,7 +59,7 @@ void sw(uint32_t address, int32_t kte, int32_t dado) {
 
   if(!validateWordAddress(tempAddress)) {
     printf("O endereço %d fornecido é inválido! ", tempAddress);
-    printf("O endereço deve ser divisível por %d e menor ou igual a %d.\n", ADDRESS_STEP, MEM_SIZE_IN_BYTES);
+    printf("O endereço deve ser divisível por %d e menor ou igual a %d.\n", ADDRESS_STEP, MEM_SIZE_IN_BYTES - 4);
     return;
   }
 
@@ -73,7 +73,7 @@ void sb(uint32_t address, int32_t kte, int8_t dado) {
 
   if(!validateByteAddress(tempAddress)) {
     printf("O endereço %d fornecido é inválido! ", tempAddress);
-    printf("O endereço deve ser maior ou igual a 0 e menor ou igual a %d\n", MEM_SIZE_IN_BYTES);
+    printf("O endereço deve ser maior ou igual a 0 e menor ou igual a %d\n", MEM_SIZE_IN_BYTES - 1);
     return;
   }
 
