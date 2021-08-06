@@ -31,10 +31,13 @@ int32_t lb(uint32_t address, int32_t kte) {
   uint8_t byteIndexInInt = tempAddress % ADDRESS_STEP;
   int32_t finalAddress = (tempAddress - byteIndexInInt) / 4;
   int32_t mask = computeByteInIntExtractionMask(byteIndexInInt);
-  int32_t shiftedByte = extractByteFromInt(mem[finalAddress], mask);
-  int32_t unsignedByte = shiftedByte >> (byteIndexInInt * 8);
+  uint32_t shiftedByte = extractByteFromInt(mem[finalAddress], mask) >> (byteIndexInInt * 8);
+  int32_t signedByte = shiftedByte;
 
-  return unsignedByte | ~computeByteInIntExtractionMask(0);
+  if(shiftedByte & 0b10000000)
+    signedByte |= 0xFFFFFF00;
+
+  return signedByte;
 }
 
 int32_t lbu(uint32_t address, int32_t kte) {
@@ -79,10 +82,10 @@ void sb(uint32_t address, int32_t kte, int8_t dado) {
 
   uint8_t byteIndexInInt = tempAddress % ADDRESS_STEP;
   int32_t finalAddress = tempAddress - byteIndexInInt;
-  int32_t expandedData = (dado << (byteIndexInInt * 8) & computeByteInIntExtractionMask(byteIndexInInt));
+  int32_t extendedValue = (dado << (byteIndexInInt * 8) & computeByteInIntExtractionMask(byteIndexInInt));
   uint32_t clearByteInPositionMask = ~computeByteInIntExtractionMask(byteIndexInInt);
   int32_t currentlyStoredWord = lw(finalAddress, 0);
-  int32_t dataToBeStored = (currentlyStoredWord & clearByteInPositionMask) | expandedData;
+  int32_t dataToBeStored = (currentlyStoredWord & clearByteInPositionMask) | extendedValue;
   sw(finalAddress, 0, dataToBeStored);
 }
 

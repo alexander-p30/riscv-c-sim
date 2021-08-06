@@ -65,15 +65,15 @@ int main() {
   printf("Testing lb\n");
   sb(0, 0, 0xAB); testLb(0, 0, 0xFFFFFFAB, &totalTests, &failedTests);resetMem();
   sb(0, 0, 0xBC); testLb(0, 0, 0xFFFFFFBC, &totalTests, &failedTests);resetMem();
-  sb(4, 0, 0x35); testLb(4, 0, 0xFFFFFF35, &totalTests, &failedTests);resetMem();
+  sb(4, 0, 0x35); testLb(4, 0, 0x35, &totalTests, &failedTests);resetMem();
   sb(4, 3, 0xBC); testLb(4, 3, 0xFFFFFFBC, &totalTests, &failedTests);resetMem();
   sb(4, 0, 0xAB); sb(4, 1, 0xCD); sb(4, 2, 0xEF); sb(4, 3, 0x01);
     testLb(4, 0, 0xFFFFFFAB, &totalTests, &failedTests);testLb(4, 1, 0xFFFFFFCD, &totalTests, &failedTests);
-    testLb(4, 2, 0xFFFFFFEF, &totalTests, &failedTests);testLb(4, 3, 0xFFFFFF01, &totalTests, &failedTests);
+    testLb(4, 2, 0xFFFFFFEF, &totalTests, &failedTests);testLb(4, 3, 0x01, &totalTests, &failedTests);
     resetMem();
   sw(MEM_SIZE_IN_BYTES, -4, 0x98765432);
-    testLb(MEM_SIZE_IN_BYTES, -4, 0xFFFFFF32, &totalTests, &failedTests);testLb(MEM_SIZE_IN_BYTES, -3, 0xFFFFFF54, &totalTests, &failedTests);
-    testLb(MEM_SIZE_IN_BYTES, -2, 0xFFFFFF76, &totalTests, &failedTests);testLb(MEM_SIZE_IN_BYTES, -1, 0xFFFFFF98, &totalTests, &failedTests);
+    testLb(MEM_SIZE_IN_BYTES, -4, 0x32, &totalTests, &failedTests);testLb(MEM_SIZE_IN_BYTES, -3, 0x54, &totalTests, &failedTests);
+    testLb(MEM_SIZE_IN_BYTES, -2, 0x76, &totalTests, &failedTests);testLb(MEM_SIZE_IN_BYTES, -1, 0xFFFFFF98, &totalTests, &failedTests);
     resetMem();
   printf("\n\n");
 
