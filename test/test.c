@@ -9,6 +9,17 @@
  * Resumo: o trabalho consiste em escrever, em C, funções que simulam
  *         instruções de manipulação e acesso à memória do conjunto
  *         de instruções RISC-V.
+ *
+ * Uma forma rápida de testar o trabalho, executando a bateria de
+ * testes abaixo, é rodar os seguintes comandos:
+ *  - make compile
+ *      Compila o projeto, incluindo o teste, e gera um binário
+ *      test_sim
+ *
+ *  - make simulate
+ *      Roda o binário test_sim, que roda os testes automatizados
+ *      e printa o seu sucesso ou falha, e printa os testes
+ *      verbosos, que deixam os valores explícitos
 */
 
 #include <stdio.h>
