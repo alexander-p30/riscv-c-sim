@@ -115,7 +115,7 @@ int main() {
   printf(ANSI_COLOR_MAGENTA "\n\t- Resultado" ANSI_COLOR_RESET);
   printf(ANSI_COLOR_RED "\n\t- Mensagem de erro\n" ANSI_COLOR_RESET);
 
-  printf(ANSI_COLOR_GREEN "\n======Primeiro cenário======\n" ANSI_COLOR_RESET);
+  printf(ANSI_COLOR_GREEN "\n======Primeiro cenário======\n\n" ANSI_COLOR_RESET);
   sb(0, 0, 0x04); sb(0, 1, 0x03); sb(0, 2, 0x02); sb(0, 3, 0x01);
   sb(4, 0, 0xAB); sb(4, 1, 0xCD); sb(4, 2, 0xEF); sb(4, 3, 0x11);
   sw(12, 0, 0xFF);
@@ -154,7 +154,11 @@ int main() {
   printf(ANSI_COLOR_RESET);
 
   printf(ANSI_COLOR_GREEN "\n======Segundo cenário======\n" ANSI_COLOR_RESET);
-  printf("Testando inserir palavras e bytes no limite da memória, ou seja, no endereço %d.\n", MEM_SIZE_IN_BYTES - 1);
+  printf(
+    "Testando inserir palavras e bytes no limite da memória, ou seja, no endereço %d para bytes e %d para palavras.\n\n",
+    MEM_SIZE_IN_BYTES - 1,
+    MEM_SIZE_IN_BYTES - 4
+  );
 
   sw(MEM_SIZE_IN_BYTES, -4, 0x98765432);
   printf(ANSI_COLOR_BLUE "sw(%d, -4, 0x98765432);\n", MEM_SIZE_IN_BYTES);
