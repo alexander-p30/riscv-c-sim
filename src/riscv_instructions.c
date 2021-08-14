@@ -20,9 +20,9 @@ int32_t shamt = 0x0;
 
 int32_t imm12_i = 0x0;
 int32_t imm12_s = 0x0;
-int32_t imm13 = 0x0;
+int32_t imm13_b = 0x0;
 int32_t imm20_u = 0x0;
-int32_t imm21 = 0x0;
+int32_t imm21_j = 0x0;
 
 enum Registers {
   ZERO = 0, RA = 1, SP = 2, GP = 3, TP = 4, T0 = 5,
@@ -46,7 +46,8 @@ void decode() {
   const int32_t funct3_mask = 0x7000;
   const int32_t rs1_mask = 0xF8000;
   const int32_t rs2_mask = 0x1F00000;
-  const int32_t funct7_mask = 0xFE000000;
+  const int32_t funct7_mask = 0x0FE00000;
+  const int32_t shamt_mask = 0x01F00000;
 
 
 
@@ -55,6 +56,7 @@ void decode() {
   funct7 = (ri & funct7_mask) >> (OPCODE_SIZE + RD_SIZE + FUNCT3_SIZE + RS1_SIZE + RS2_SIZE);
   rs1 = (ri & rs1_mask) >> (OPCODE_SIZE + RD_SIZE + FUNCT3_SIZE);
   rs2 = (ri & rs2_mask) >> (OPCODE_SIZE + RD_SIZE + FUNCT3_SIZE + RS1_SIZE);
+  shamt = (ri & shamt_mask) >> (OPCODE_SIZE + RD_SIZE + FUNCT3_SIZE + RS1_SIZE);
 
   ri = 0b11111111111111111111111110000000 | OPCODE_I_0;
   opcode = ri & opcode_mask;
@@ -66,7 +68,7 @@ void decode() {
 
   ri = 0b11111111111111111111111110000000 | OPCODE_B;
   opcode = ri & opcode_mask;
-  imm13 = get_imm();
+  imm13_b = get_imm();
 
   ri = 0b11111111111111111111111110000000 | OPCODE_U_0;
   opcode = ri & opcode_mask;
@@ -74,15 +76,15 @@ void decode() {
 
   ri = 0b11111111111111111111111110000000 | OPCODE_J;
   opcode = ri & opcode_mask;
-  imm21 = get_imm();
+  imm21_j = get_imm();
 }
 
 int32_t get_imm() {
   const int32_t imm12_i_mask = 0xFFF00000;
   const int32_t imm12_s_mask = 0xFE000F80;
-  const int32_t imm13_mask = 0xFE000F80;
+  const int32_t imm13_b_mask = 0xFE000F80;
   const int32_t imm20_u_mask = 0xFFFFF000;
-  const int32_t imm21_mask = 0xFFFFF000;
+  const int32_t imm21_j_mask = 0xFFFFF000;
 
   int32_t msb = 0x0;
   int32_t second_msb = 0x0;
@@ -161,34 +163,42 @@ void execute_I() {
     case OPCODE_I_0:
       switch(funct3) {
         case 0b000: // lb
-          breg[rd] = lb(rs1, imm12_i);
+          breg[rd] = lb(breg[rs1], imm12_i);
         case 0b010: // lw
-          breg[rd] = lw(rs1, imm12_i);
+          breg[rd] = lw(breg[rs1], imm12_i);
         case 0b100: // lbu
-          breg[rd] = lbu(rs1, imm12_i);
+          breg[rd] = lbu(breg[rs1], imm12_i);
       }
     case OPCODE_I_1:
       switch(funct3) {
         case 0b000: // addi
           breg[rd] = breg[rs1] + imm12_i;
-        case 0b110:
-          ori();
-        case 0b111:
-          andi();
-        case 0b001:
-          slli();
+        case 0b110: // ori
+          breg[rd] = breg[rs1] | imm12_i;
+        case 0b111: // andi
+          breg[rd] = breg[rs1] & imm12_i;
+        case 0b001: // slli
+          breg[rd] = breg[rs1] << shamt;
         case 0b101:
           switch(funct7) {
-            case 0b0000000:
-              srli();
-            case 0b0100000:
-              srai();
+            case 0b0000000: // srli
+              breg[rd] = (uint32_t)breg[rs1] >> shamt;
+            case 0b0100000: // srai
+              breg[rd] = breg[rs1] >> shamt;
           }
       }
     case OPCODE_I_2:
-      ecall();
-    case OPCODE_I_3:
-      jalr();
+      switch(breg[A7]) {
+        case 1: // printInt
+          printf("%d", getMem()[breg[A0]]);
+        case 4: // printString
+          printf("%s", getMem()[breg[A0]]);
+        case 10: // exit
+          return;
+      }
+    case OPCODE_I_3: // jalr
+      breg[rd] = pc + 4;
+      pc = (rs1 + imm12_i) & ~1;
   }
 }
 
@@ -196,52 +206,59 @@ void execute_R() {
   switch(funct3) {
     case 0b000:
       switch(funct7) {
-        case 0b00000000:
-          add();
-        case 0b01000000:
-          sub();
+        case 0b00000000: // add
+          breg[rd] = breg[rs1] + breg[rs2];
+        case 0b01000000: // sub
+          breg[rd] = breg[rs1] - breg[rs2];
       }
-    case 0b010:
-      slt();
-    case 0b011:
-      sltu();
-    case 0b100:
-      xor();
-    case 0b110:
-      or();
-    case 0b111:
-      and();
+    case 0b010: // slt
+      breg[rd] = breg[rs1] << breg[rs2];
+    case 0b011: //sltu
+      breg[rd] = (uint32_t)breg[rs1] << breg[rs2];
+    case 0b100: // xor
+      breg[rd] = breg[rs1] ^ breg[rs2];
+    case 0b110: // or
+      breg[rd] = breg[rs1] | breg[rs2];
+    case 0b111: // and
+      breg[rd] = breg[rs1] & breg[rs2];
   }
 }
 
 void execute_S() {
   switch(funct3) {
-    case 0b000:
-      sb();
-    case 0b010:
-      sw();
+    case 0b000: // sb
+      sb(breg[rs1], imm12_s, breg[rs2]);
+    case 0b010: // sw
+      sw(breg[rs1], imm12_s, breg[rs2]);
   }
 }
 
 void execute_B() {
   switch(funct3) {
-    case 0b000:
-      beq();
-    case 0b001:
-      bne();
-    case 0b100:
-      blt();
-    case 0b101:
-      bge();
-    case 0b110:
-      bltu();
-    case 0b111:
-      bgeu();
+    case 0b000: // beq
+      if(breg[rs1] == breg[rs2])
+        pc += imm13_b;
+    case 0b001: // bne
+      if(breg[rs1] != breg[rs2])
+        pc += imm13_b;
+    case 0b100: // blt
+      if(breg[rs1] < breg[rs2])
+        pc += imm13_b;
+    case 0b101: // bge
+      if(breg[rs1] >= breg[rs2])
+        pc += imm13_b;
+    case 0b110: // bltu
+      if((uint32_t)breg[rs1] < (uint32_t)breg[rs2])
+        pc += imm13_b;
+    case 0b111: // bgeu
+      if((uint32_t)breg[rs1] >= (uint32_t)breg[rs2])
+        pc += imm13_b;
   }
 }
 
-void execute_J() {
-  jal();
+void execute_J() { // jal
+  breg[rd] = pc + 4;
+  pc = pc + imm21_j;
 }
 
 

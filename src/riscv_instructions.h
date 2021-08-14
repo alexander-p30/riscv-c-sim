@@ -2,6 +2,7 @@
 #define RISCV_INSTRUCTIONS_H
 
 #include <stdint.h>
+#include <stdio.h>
 
 #define OPCODE_U_0 0x37
 #define OPCODE_U_1 0x17
