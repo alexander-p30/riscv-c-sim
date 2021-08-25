@@ -41,6 +41,8 @@ void dump_mem(int start, int end, char format);
 
 void dump_reg(char format);
 
+void load_mem(const char *fileName, int start);
+
 int32_t get_imm();
 
 #endif
