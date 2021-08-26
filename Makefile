@@ -1,6 +1,6 @@
 compile:
-	ls **/*.c | xargs gcc -o test_sim -g
+	ls **/*.c | xargs gcc -o riscv_sim -g
 
 simulate:
-	./test_sim
+	./riscv_sim
 
