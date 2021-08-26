@@ -34,7 +34,6 @@
 #define ANSI_COLOR_RESET   "\x1b[0m"
 
 int main() {
-  printf("\n");
   load_mem("text.bin", 0);
   load_mem("data.bin", 0x2000);
   run();
