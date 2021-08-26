@@ -16,6 +16,23 @@
  *  - make simulate
  *      Roda o binário riscv_sim, que carrega o programa da pasta raíz
  *      do projeto (a pasta anterior a esta)
+ *
+ *  - make test_testador
+ *      Copia os binários do programa testador disponibilizado pelo
+ *      professor e roda o simulador carregando esse programa
+ *
+ *  - make test_jalr
+ *      Copia os binários do programa de teste da instrução jalr
+ *      e roda o simulador carregando esse programa
+ *
+ *  - make test_nop
+ *      Copia os binários do programa de teste da instrução nop
+ *      e roda o simulador carregando esse programa
+ *
+ *  - make test_sltu
+ *      Copia os binários do programa de teste da instrução sltu
+ *      e roda o simulador carregando esse programa
+ *
  */
 
 #include <stdio.h>
