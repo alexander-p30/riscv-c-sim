@@ -6,21 +6,17 @@
  * Compilador: gcc 11.1.0
  * SO: Linux
  * IDE: Vim
- * Resumo: o trabalho consiste em escrever, em C, funções que simulam
- *         instruções de manipulação e acesso à memória do conjunto
- *         de instruções RISC-V.
  *
- * Uma forma rápida de testar o trabalho, executando a bateria de
- * testes abaixo, é rodar os seguintes comandos:
+ * Uma forma rápida de testar o trabalho, rodando o programa na
+ * pasta raíz, é rodar os seguintes comandos:
  *  - make compile
  *      Compila o projeto, incluindo o teste, e gera um binário
- *      test_sim
+ *      riscv_sim
  *
  *  - make simulate
- *      Roda o binário test_sim, que roda os testes automatizados
- *      e printa o seu sucesso ou falha, e printa os testes
- *      verbosos, que deixam os valores explícitos
-*/
+ *      Roda o binário riscv_sim, que carrega o programa da pasta raíz
+ *      do projeto (a pasta anterior a esta)
+ */
 
 #include <stdio.h>
 #include "../src/riscv_memory.h"
